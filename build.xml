@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="jOpenRay" default="dist" basedir=".">
+	<target name="dist">
+		<!-- création d'un répertoire pour le JAR -->
+		<mkdir dir="dist" />
+		<!-- création du JAR -->
+		<jar destfile="dist/jOpenRay.jar" basedir="bin">
+			<zipfileset src="lib/jdom.jar" />
+			<zipfileset src="lib/log4j-1.2.15.jar" />
+			<manifest>
+				<attribute name="Main-Class" value="org.jopenray.server.OpenRayServer" />
+			</manifest>
+		</jar>
+		
+	</target>
+</project>
