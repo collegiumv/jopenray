@@ -223,7 +223,7 @@ public class MapDef {
 
 		if (Constants.OS == Constants.MAC) {
 			// Remap the hash key to �
-			if (Options.remap_hash && (e.getKeyChar() == '�')) {
+			if (Options.remap_hash && (e.getKeyChar() == '#')) {
 				return ((characterDef) && (this.keyChar == '#'));
 			}
 
