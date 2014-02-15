@@ -21,12 +21,11 @@ import java.awt.event.KeyEvent;
 
 public class HID {
 	public static int hidToKeyCode(int hid) {
-		// Keyboard langage dependent
-		// French keyboard:
+		// QWERTY keyboard
 		int r = 0;
 		switch (hid) {
 		case 4:
-			r = KeyEvent.VK_Q;
+			r = KeyEvent.VK_A;
 			break;
 		case 5:
 			r = KeyEvent.VK_B;
@@ -62,7 +61,7 @@ public class HID {
 			r = KeyEvent.VK_L;
 			break;
 		case 16:
-			r = KeyEvent.VK_COMMA;
+			r = KeyEvent.VK_M;
 			break;
 		case 17:
 			r = KeyEvent.VK_N;
@@ -74,7 +73,7 @@ public class HID {
 			r = KeyEvent.VK_P;
 			break;
 		case 20:
-			r = KeyEvent.VK_A;
+			r = KeyEvent.VK_Q;
 			break;
 		case 21:
 			r = KeyEvent.VK_R;
@@ -92,7 +91,7 @@ public class HID {
 			r = KeyEvent.VK_V;
 			break;
 		case 26:
-			r = KeyEvent.VK_Z;
+			r = KeyEvent.VK_W;
 			break;
 		case 27:
 			r = KeyEvent.VK_X;
@@ -101,7 +100,7 @@ public class HID {
 			r = KeyEvent.VK_Y;
 			break;
 		case 29:
-			r = KeyEvent.VK_W;
+			r = KeyEvent.VK_Z;
 			break;
 		case 30:
 			r = KeyEvent.VK_1;
@@ -160,18 +159,26 @@ public class HID {
 		case 48:
 			r = KeyEvent.VK_CLOSE_BRACKET;
 			break;
-		case 51:
-			r = KeyEvent.VK_M;
+		case 49:
+			r = KeyEvent.VK_BACK_SLASH;
 			break;
-
-		case 54:
+		case 51:
 			r = KeyEvent.VK_SEMICOLON;
 			break;
+		case 52:
+			r = KeyEvent.VK_QUOTE;
+			break;
+		case 53:
+			r = KeyEvent.VK_BACK_QUOTE;
+			break;
+		case 54:
+			r = KeyEvent.VK_COMMA;
+			break;
 		case 55:
-			r = KeyEvent.VK_COLON;
+			r = KeyEvent.VK_PERIOD;
 			break;
 		case 56:
-			r = KeyEvent.VK_EXCLAMATION_MARK;
+			r = KeyEvent.VK_SLASH;
 			break;
 		case 57:
 			r = KeyEvent.VK_CAPS_LOCK;
@@ -225,7 +232,7 @@ public class HID {
 			r = KeyEvent.VK_INSERT;
 			break;
 		case 74:
-			r = KeyEvent.VK_BEGIN;
+			r = KeyEvent.VK_HOME;
 			break;
 		case 75:
 			r = KeyEvent.VK_PAGE_UP;
@@ -239,7 +246,6 @@ public class HID {
 		case 78:
 			r = KeyEvent.VK_PAGE_DOWN;
 			break;
-
 		case 79:
 			r = KeyEvent.VK_RIGHT;
 			break;
@@ -300,7 +306,6 @@ public class HID {
 		case 122:
 			r = KeyEvent.VK_CANCEL;
 			break;
-
 		case 123:
 			r = KeyEvent.VK_CUT;
 			break;
