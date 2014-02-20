@@ -21,6 +21,7 @@ import java.awt.image.BufferedImage;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.PrintStream;
 import java.util.zip.ZipEntry;
@@ -32,7 +33,6 @@ import org.jopenray.server.thinclient.BitmapEncoder;
 import org.jopenray.server.thinclient.DisplayMessage;
 import org.jopenray.server.thinclient.DisplayWriterThread;
 
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 
 public class BenchmarkEncoder {
 	static long totalL = 0;
@@ -61,7 +61,7 @@ public class BenchmarkEncoder {
 			}
 
 			System.setOut(new PrintStream(new BufferedOutputStream(
-					new ByteOutputStream(1000000))));
+					new ByteArrayOutputStream(1000000))));
 			for (int i = 0; i < ims.length; i++) {
 				long t1 = System.nanoTime();
 				long l1 = totalL;
