@@ -342,11 +342,6 @@ public class ThinClient {
 	public void sendBytes(byte[] buffer, int bufferLength) throws IOException {
 		DatagramPacket dataSent = new DatagramPacket(buffer, 0, bufferLength,
 				getServer(), getServerPort());
-		// System.out.println("Dumping...");
-		// PacketAnalyser.dump(buffer, bufferLength);
-		// System.out.println("Decoding...");
-		// PacketAnalyser.decode(buffer, bufferLength);
-
 		getSocket().send(dataSent);
 
 	}
