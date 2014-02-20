@@ -33,79 +33,6 @@ public class PacketAnalyser {
 	static BufferedOutputStream soundOut;
 	static PrintStream outTest;
 
-	public static void main(String[] args) throws Exception {
-
-		// "sunray_login_carte.pcap"
-		// "uu.pcap"
-		String pathname = "1hz_mono.pcap";
-		PcapFileReader reader = new PcapFileReader(new File(pathname));
-
-		int index = 0;
-
-		PrintStream out = new PrintStream(new BufferedOutputStream(
-				new FileOutputStream(pathname + "_out.txt")));
-
-		soundOut = new BufferedOutputStream(new FileOutputStream(pathname
-				+ "_sound.raw"));
-		outTest = new PrintStream(new BufferedOutputStream(
-				new FileOutputStream(pathname + "_test.txt")));
-		try {
-			while (reader.hasNext()) {
-				PcapPacket packet = reader.next();
-				index++;
-				try {
-					System.out.println("Packet:" + index);
-					out.println();
-					out.println();
-					out
-							.println("Packet:"
-									+ index
-									+ "   ===========================================================================================");
-
-					if (packet.isIP()) {
-
-						if (packet.isUDP()) {
-
-							if (packet.getSourceIp().equals("192.168.1.13")
-									|| packet.getSourceIp().equals(
-											"192.168.1.188")) {
-
-								byte[] udpData = packet.getData();
-
-								out.println("UDP " + packet.getSourceIp() + ":"
-										+ packet.getUDPSrcPort() + " -> "
-										+ packet.getDestIp() + ":"
-										+ packet.getUDPDstPort());
-								decode(out, udpData);
-							} else {
-								out.println("UDP filtered:"
-										+ packet.getSourceIp() + " / "
-										+ packet.getDestIp());
-							}
-
-						} else {
-							out
-									.println("No UDP: "
-											+ packet.getPacketProtocol());
-							HexDumpEncoder d = new HexDumpEncoder();
-							out.println(d.encode(packet.getRaw()));
-						}
-					}
-				} catch (Exception e) {
-
-				}
-			}
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-		out.flush();
-		out.close();
-		soundOut.flush();
-		soundOut.close();
-		outTest.close();
-	}
-
 	public static void decode(PrintStream out, byte[] udpData)
 			throws IOException {
 		boolean dump = false;
@@ -122,10 +49,7 @@ public class PacketAnalyser {
 		out.print(" Type:" + type);
 		int dir = readInt16(bIn);
 		out.println(" Dir:" + dir + " dataSize:" + udpData.length);
-		if (dir != 2000) {
-			if (dir != 0) {
-				out.println("Direction unknown:" + dir);
-			}
+		if (dir == 0) {
 			// Server -> Sunray
 			int a = readInt16(bIn);
 			int b = readInt16(bIn);
@@ -184,8 +108,6 @@ public class PacketAnalyser {
 					byte[] unkuonw = new byte[nbBytes];
 					try {
 						int lRead = bIn.read(unkuonw);
-						HexDumpEncoder hdump = new HexDumpEncoder();
-						// out.println(hdump.encode(unkuonw));
 						out.println("FillRectBitmap: Color:" + a3p1 + ","
 								+ a3p2 + "," + a3p3 + "," + a3p4
 								+ " | bytes/row:" + nbBytesPerRow + "l:"
@@ -322,8 +244,6 @@ public class PacketAnalyser {
 					dump = true;
 					try {
 						int lRead = bIn.read(unkuonwn);
-						HexDumpEncoder hdump = new HexDumpEncoder();
-						// out.println(hdump.encode(unkuonwn));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -623,8 +543,7 @@ public class PacketAnalyser {
 			}
 		} else {
 			out.println("Unknown packet direction:" + dir);
-			if (dir != 0)
-				dump = true;
+			dump = true;
 		}
 		if (dump) {
 			HexDumpEncoder hdump = new HexDumpEncoder();
@@ -681,24 +600,6 @@ public class PacketAnalyser {
 			throw new IllegalStateException("Unexpected end of stream");
 		}
 		return a * 256 * 256 * 256 + b * 256 * 256 + c * 256 + d;
-
-	}
-
-	public static void dump(PrintStream out, byte[] bufferContent, int length) {
-		if (length > bufferContent.length) {
-			throw new IllegalStateException("size!:" + length + " buff:"
-					+ bufferContent.length);
-		}
-
-		byte[] b = new byte[length];
-		System.arraycopy(bufferContent, 0, b, 0, length);
-		try {
-			HexDumpEncoder e = new HexDumpEncoder();
-			out.println(e.encode(b));
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 
 	}
 

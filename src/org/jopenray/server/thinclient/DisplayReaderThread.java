@@ -26,7 +26,6 @@ import java.util.List;
 
 import org.jopenray.operation.PadOperation;
 import org.jopenray.util.HID;
-import org.jopenray.util.PacketAnalyser;
 
 import sun.misc.HexDumpEncoder;
 
@@ -54,12 +53,8 @@ public class DisplayReaderThread extends Thread {
 
 		try {
 			while (!this.isInterrupted()) {
-
 				client.getSocket().receive(packet);
-				int length = packet.getLength();
-				// System.out.println("\nPacket received length:" + length);
-				handlePacket(buf, length);
-
+				handlePacket(buf, packet.getLength());
 			}
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
@@ -71,46 +66,41 @@ public class DisplayReaderThread extends Thread {
 	private void handlePacket(byte[] udpData, int l) {
 		boolean dump = false;
 		ByteArrayInputStream bIn = new ByteArrayInputStream(udpData, 0, l);
-		int r = PacketAnalyser.readInt16(bIn);
+		int r = readInt16(bIn);
+		int flag = readInt16(bIn);
+		int type = readInt16(bIn);
+		int dir = readInt16(bIn);
 		if (DEBUG)
-			System.out.print("Seq number:" + r);
-		int flag = PacketAnalyser.readInt16(bIn);
-		if (DEBUG)
-			System.out.print(" Flag:" + flag);
-		int type = PacketAnalyser.readInt16(bIn);
-		if (DEBUG)
-			System.out.print(" Type:" + type);
-		int dir = PacketAnalyser.readInt16(bIn);
-		if (DEBUG)
-			System.out.println(" Dir:" + dir);
-		if (true) {
-			// Sunray ->Server
-			int a = PacketAnalyser.readInt16(bIn);
-			int b = PacketAnalyser.readInt16(bIn);
-			int c = PacketAnalyser.readInt16(bIn);
-			int d = PacketAnalyser.readInt16(bIn);
-			if (DEBUG)
-				System.out.println("Sunray -> Server:" + a + "," + b + "," + c
-						+ "," + d);
-			if (bIn.available() == 0) {
-				DisplayMessage m = new DisplayMessage(client.getWriter());
-				m.addOperation(new PadOperation());
-				this.client.getWriter().addMessage(m);
-			} else
-				while (bIn.available() > 0) {
-					int opcode = bIn.read();
-					int hdat = PacketAnalyser.readInt16(bIn);
-					int idat = bIn.read();
-					String opCodeHeader = "";
+			System.out.print("Seq number:" + r + " Flag:" + flag
+					+ " Type:" + type + " Dir:" + dir);
 
-					opCodeHeader += "[ Opcode: " + opcode + " , " + hdat + " ,"
-							+ idat + " ]";
+		// Sunray ->Server
+		int a = readInt16(bIn);
+		int b = readInt16(bIn);
+		int c = readInt16(bIn);
+		int d = readInt16(bIn);
+		if (DEBUG)
+			System.out.println("Sunray -> Server:" + a + "," + b + "," + c
+					+ "," + d);
+		if (bIn.available() == 0) {
+			DisplayMessage m = new DisplayMessage(client.getWriter());
+			m.addOperation(new PadOperation());
+			this.client.getWriter().addMessage(m);
+		} else
+			while (bIn.available() > 0) {
+				int opcode = bIn.read();
+				int hdat = readInt16(bIn);
+				int idat = bIn.read();
+				String opCodeHeader = "";
 
-					switch (opcode) {
+				opCodeHeader += "[ Opcode: " + opcode + " , " + hdat + " ,"
+					+ idat + " ]";
+
+				switch (opcode) {
 					case 0xc1:
-
-						int jdat = PacketAnalyser.readInt16(bIn);
-						int modifier = PacketAnalyser.readInt16(bIn);
+						dump=true;
+						int jdat = readInt16(bIn);
+						int modifier = readInt16(bIn);
 						// 6 octet
 						int key1 = bIn.read();
 						int key2 = bIn.read();
@@ -120,7 +110,7 @@ public class DisplayReaderThread extends Thread {
 						int key6 = bIn.read();
 
 						//
-						int mdat = PacketAnalyser.readInt16(bIn);
+						int mdat = readInt16(bIn);
 						System.out.println("Keyboard " + opCodeHeader + " "
 								+ jdat + " modifier:" + modifier + " keys:("
 								+ key1 + "," + key2 + "," + key3 + "," + key4
@@ -140,7 +130,7 @@ public class DisplayReaderThread extends Thread {
 										+ (modifier & 0x2));
 								sendKeyPressed(hidToKeyCode,
 										(modifier & 2) != 0
-												|| (modifier & 32) != 0,
+										|| (modifier & 32) != 0,
 										(modifier & 1) != 0,
 										(modifier & 4) != 0,
 										(modifier & 8) != 0,
@@ -160,10 +150,10 @@ public class DisplayReaderThread extends Thread {
 
 						break;
 					case 0xc2:
-						int buttons = PacketAnalyser.readInt16(bIn);
-						int mouseX = PacketAnalyser.readInt16(bIn);
-						int mouseY = PacketAnalyser.readInt16(bIn);
-						int c2 = PacketAnalyser.readInt16(bIn);
+						int buttons = readInt16(bIn);
+						int mouseX = readInt16(bIn);
+						int mouseY = readInt16(bIn);
+						int c2 = readInt16(bIn);
 						if (DEBUG)
 							System.out.println("Mouse" + opCodeHeader
 									+ " buttons:" + buttons + " (" + mouseX
@@ -171,95 +161,91 @@ public class DisplayReaderThread extends Thread {
 						processMouseEvent(buttons, mouseX, mouseY);
 						break;
 					case 0xc4: {
-						int c41 = PacketAnalyser.readInt32(bIn);
-						int c42 = PacketAnalyser.readInt32(bIn);
-						int c43 = PacketAnalyser.readInt32(bIn);
+							   int c41 = readInt32(bIn);
+							   int c42 = readInt32(bIn);
+							   int c43 = readInt32(bIn);
 
-						System.out.println("NACK  seq= " + c41 + "  type: "
-								+ c42 + " , " + c43);
-						client.resend(c42, c43);
-						break;
+							   System.out.println("NACK  seq= " + c41 + "  type: "
+									   + c42 + " , " + c43);
+							   client.resend(c42, c43);
+							   break;
 					}
 					case 0xc5:
-						int c51 = bIn.read();
-						int c52 = bIn.read();
-						int c53 = bIn.read();
-						int c54 = bIn.read();
+						   int c51 = bIn.read();
+						   int c52 = bIn.read();
+						   int c53 = bIn.read();
+						   int c54 = bIn.read();
 
-						System.out.println("0xC5 " + opCodeHeader + " " + c51
-								+ "," + c52 + "," + c53 + "," + c54);
-						break;
+						   System.out.println("0xC5 " + opCodeHeader + " " + c51
+								   + "," + c52 + "," + c53 + "," + c54);
+						   break;
 					case 0xc6:
-						int dataLength = PacketAnalyser.readInt16(bIn);
-						int stringLength = bIn.read();
-						byte[] string = new byte[stringLength];
+						   int dataLength = readInt16(bIn);
+						   int stringLength = bIn.read();
+						   byte[] string = new byte[stringLength];
 
-						try {
-							int rL = bIn.read(string);
-							System.out.println(dataLength + " , "
-									+ stringLength + " readLength" + rL);
-							System.out.println("Firmware: "
-									+ new String(string));
-							// dump = true;
-						} catch (IOException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
-						}
+						   try {
+							   int rL = bIn.read(string);
+							   System.out.println(dataLength + " , "
+									   + stringLength + " readLength" + rL);
+							   System.out.println("Firmware: "
+									   + new String(string));
+							   // dump = true;
+						   } catch (IOException e) {
+							   // TODO Auto-generated catch block
+							   e.printStackTrace();
+						   }
 
-						break;
+						   break;
 
 					case 0xc7: {
-						int x1 = PacketAnalyser.readInt16(bIn);
-						int y1 = PacketAnalyser.readInt16(bIn);
-						int w1 = PacketAnalyser.readInt16(bIn);
-						int h1 = PacketAnalyser.readInt16(bIn);
-						int x2 = PacketAnalyser.readInt16(bIn);
-						int y2 = PacketAnalyser.readInt16(bIn);
-						int w2 = PacketAnalyser.readInt16(bIn);
-						int h2 = PacketAnalyser.readInt16(bIn);
-						int x3 = PacketAnalyser.readInt16(bIn);
-						int y3 = PacketAnalyser.readInt16(bIn);
-						int w3 = PacketAnalyser.readInt16(bIn);
-						int h3 = PacketAnalyser.readInt16(bIn);
-						if (DEBUG)
-							System.out.println("Rect: " + opCodeHeader + " ["
-									+ x1 + "," + y1 + "," + w1 + "," + h1
-									+ "][" + x2 + "," + y2 + "," + w2 + ","
-									+ h2 + "][" + x3 + "," + y3 + "," + w3
-									+ "," + h3 + "]");
+							   int x1 = readInt16(bIn);
+							   int y1 = readInt16(bIn);
+							   int w1 = readInt16(bIn);
+							   int h1 = readInt16(bIn);
+							   int x2 = readInt16(bIn);
+							   int y2 = readInt16(bIn);
+							   int w2 = readInt16(bIn);
+							   int h2 = readInt16(bIn);
+							   int x3 = readInt16(bIn);
+							   int y3 = readInt16(bIn);
+							   int w3 = readInt16(bIn);
+							   int h3 = readInt16(bIn);
+							   if (DEBUG)
+								   System.out.println("Rect: " + opCodeHeader + " ["
+										   + x1 + "," + y1 + "," + w1 + "," + h1
+										   + "][" + x2 + "," + y2 + "," + w2 + ","
+										   + h2 + "][" + x3 + "," + y3 + "," + w3
+										   + "," + h3 + "]");
 
-						break;
+							   break;
 					}
 					case 0xcb:
-						int bc1 = bIn.read();
-						int bc2 = PacketAnalyser.readInt16(bIn);
-						int bc3 = PacketAnalyser.readInt16(bIn);
-						int bc4 = PacketAnalyser.readInt16(bIn);
-						int bc5 = PacketAnalyser.readInt16(bIn);
-						int bc6 = PacketAnalyser.readInt16(bIn);
-						int bc7 = PacketAnalyser.readInt16(bIn);
-						int bc8 = PacketAnalyser.readInt16(bIn);
-						int bc9 = PacketAnalyser.readInt16(bIn);
-						int bc10 = PacketAnalyser.readInt16(bIn);
-						int bc11 = PacketAnalyser.readInt16(bIn);
-						if (DEBUG)
-							System.out
-									.println("0xCB " + opCodeHeader + " " + bc1
-											+ "," + bc2 + "," + bc3 + "," + bc4
-											+ "," + bc5 + "," + bc6 + "," + bc7
-											+ "," + bc8 + "," + bc9 + ","
-											+ bc10 + "," + bc11);
-						break;
+						   int bc1 = bIn.read();
+						   int bc2 = readInt16(bIn);
+						   int bc3 = readInt16(bIn);
+						   int bc4 = readInt16(bIn);
+						   int bc5 = readInt16(bIn);
+						   int bc6 = readInt16(bIn);
+						   int bc7 = readInt16(bIn);
+						   int bc8 = readInt16(bIn);
+						   int bc9 = readInt16(bIn);
+						   int bc10 = readInt16(bIn);
+						   int bc11 = readInt16(bIn);
+						   if (DEBUG)
+							   System.out
+								   .println("0xCB " + opCodeHeader + " " + bc1
+										   + "," + bc2 + "," + bc3 + "," + bc4
+										   + "," + bc5 + "," + bc6 + "," + bc7
+										   + "," + bc8 + "," + bc9 + ","
+										   + bc10 + "," + bc11);
+						   break;
 					default:
-						System.out.println("Unknown opcode: " + opCodeHeader);
-						dump = true;
-						break;
-					}
+						   System.out.println("Unknown opcode: " + opCodeHeader);
+						   dump = true;
+						   break;
 				}
-		} else {
-			System.err.println("Unknown packet direction:" + dir);
-			dump = true;
-		}
+			}
 		if (dump) {
 			HexDumpEncoder hdump = new HexDumpEncoder();
 			byte[] rBytes = new byte[l];
@@ -290,18 +276,18 @@ public class DisplayReaderThread extends Thread {
 		if ((change & 1) > 0) {
 			if ((buttons & 1) > 0) {
 				System.out
-						.println("DisplayReaderThread.processMouseEvent() BUTTON1 pressed");
+					.println("DisplayReaderThread.processMouseEvent() BUTTON1 pressed");
 				sendMousePressed(MouseEvent.BUTTON1, mouseX, mouseY);
 			} else {
 				System.out
-						.println("DisplayReaderThread.processMouseEvent() BUTTON1 released");
+					.println("DisplayReaderThread.processMouseEvent() BUTTON1 released");
 				sendMouseReleased(MouseEvent.BUTTON1, mouseX, mouseY);
 			}
 		}
 		if ((change & 2) > 0) {
 			if ((buttons & 2) > 0) {
 				System.out
-						.println("DisplayReaderThread.processMouseEvent() BUTTON2 pressed");
+					.println("DisplayReaderThread.processMouseEvent() BUTTON2 pressed");
 				sendMousePressed(MouseEvent.BUTTON2, mouseX, mouseY);
 			} else {
 				sendMouseReleased(MouseEvent.BUTTON2, mouseX, mouseY);
@@ -310,7 +296,7 @@ public class DisplayReaderThread extends Thread {
 		if ((change & 4) > 0) {
 			if ((buttons & 4) > 0) {
 				System.out
-						.println("DisplayReaderThread.processMouseEvent() BUTTON3 pressed");
+					.println("DisplayReaderThread.processMouseEvent() BUTTON3 pressed");
 				sendMousePressed(MouseEvent.BUTTON3, mouseX, mouseY);
 			} else {
 				sendMouseReleased(MouseEvent.BUTTON3, mouseX, mouseY);
@@ -319,7 +305,7 @@ public class DisplayReaderThread extends Thread {
 		if ((change & 8) > 0) {
 			if ((buttons & 8) > 0) {
 				System.out
-						.println("DisplayReaderThread.processMouseEvent() mouse wheel up");
+					.println("DisplayReaderThread.processMouseEvent() mouse wheel up");
 				sendMouseWheelUp(mouseX, mouseY);
 			} else {
 				// sendMouseReleased(MouseEvent.BUTTON3, mouseX, mouseY);
@@ -328,7 +314,7 @@ public class DisplayReaderThread extends Thread {
 		if ((change & 16) > 0) {
 			if ((buttons & 16) > 0) {
 				System.out
-						.println("DisplayReaderThread.processMouseEvent() mouse wheel down");
+					.println("DisplayReaderThread.processMouseEvent() mouse wheel down");
 				sendMouseWheelDown(mouseX, mouseY);
 			} else {
 				// sendMouseReleased(MouseEvent.BUTTON3, mouseX, mouseY);
@@ -407,5 +393,25 @@ public class DisplayReaderThread extends Thread {
 	public void removeInputListener(InputListener l) {
 		this.listeners.remove(l);
 
+	}
+
+	public static int readInt16(ByteArrayInputStream in) {
+		int a = in.read();
+		int b = in.read();
+		if (a < 0 || b < 0) {
+			throw new IllegalStateException("Unexpected end of stream");
+		}
+		return a * 256 + b;
+	}
+
+	public static int readInt32(ByteArrayInputStream in) {
+		int a = in.read();
+		int b = in.read();
+		int c = in.read();
+		int d = in.read();
+		if (a < 0 || b < 0 || c < 0 || d < 0) {
+			throw new IllegalStateException("Unexpected end of stream");
+		}
+		return a * 256 * 256 * 256 + b * 256 * 256 + c * 256 + d;
 	}
 }

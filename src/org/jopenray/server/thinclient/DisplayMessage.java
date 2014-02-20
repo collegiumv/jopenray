@@ -101,7 +101,6 @@ public class DisplayMessage {
 					if (false) {
 						System.out.println("\nSending fragment packet seq:"
 								+ displayWriterThread.getCurrentOpcodeSeq());
-						// PacketAnalyser.decode(buffer, bufferLength);
 					}
 					client.sendBytes(buffer, bufferLength);
 
@@ -129,7 +128,6 @@ public class DisplayMessage {
 			if (false) {
 				System.out.println("\nSending last packet op seq:"
 						+ displayWriterThread.getCurrentOpcodeSeq());
-				// PacketAnalyser.decode(buffer, bufferLength);
 			}
 			client.sendBytes(buffer, bufferLength);
 		}
@@ -309,7 +307,6 @@ public class DisplayMessage {
 	 */
 
 	public int getLength() {
-
 		return l;
 	}
 
