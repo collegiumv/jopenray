@@ -32,7 +32,6 @@ public class DebugClient extends ThinClient {
 	public void sendBytes(byte[] buffer, int bufferLength) throws IOException {
 		System.out.println("DebugClient.sendBytes() length:" + bufferLength);
 		l += bufferLength;
-		// PacketAnalyser.decode(System.out,buffer, bufferLength);
 		System.out.println("Sent:" + l + " bytes -> " + (l / 1024) + " KB");
 	}
 
