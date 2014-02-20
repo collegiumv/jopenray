@@ -98,10 +98,6 @@ public class DisplayMessage {
 					ByteArrayList.setInt16(buffer, 4, type);
 					// next 12 bytes are 0
 
-					if (false) {
-						System.out.println("\nSending fragment packet seq:"
-								+ displayWriterThread.getCurrentOpcodeSeq());
-					}
 					client.sendBytes(buffer, bufferLength);
 
 					o.copyEnd(buffer, nbBytesMissing, 16);
@@ -125,10 +121,6 @@ public class DisplayMessage {
 			ByteArrayList.setInt16(buffer, 2, nextPacketStartAt);
 			ByteArrayList.setInt16(buffer, 4, type);
 			// next 12 bytes are 0
-			if (false) {
-				System.out.println("\nSending last packet op seq:"
-						+ displayWriterThread.getCurrentOpcodeSeq());
-			}
 			client.sendBytes(buffer, bufferLength);
 		}
 		// System.out.println("=====Sending Message done...");
