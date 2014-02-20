@@ -23,7 +23,7 @@ import java.io.InputStream;
 public class VeraFont {
 
 	public static Font getMonoFont() {
-		InputStream is = VeraFont.class.getResourceAsStream("VeraMono.ttf");
+		InputStream is = VeraFont.class.getResourceAsStream("/VeraMono.ttf");
 		Font font = null;
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, is);
@@ -34,7 +34,7 @@ public class VeraFont {
 	}
 
 	public static Font getFont() {
-		InputStream is = VeraFont.class.getResourceAsStream("Vera.ttf");
+		InputStream is = VeraFont.class.getResourceAsStream("/Vera.ttf");
 		Font font = null;
 		try {
 			font = Font.createFont(Font.TRUETYPE_FONT, is);

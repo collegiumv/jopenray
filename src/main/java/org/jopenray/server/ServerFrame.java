@@ -47,7 +47,7 @@ public class ServerFrame extends JFrame {
 		c.gridy = 0;
 		c.fill = GridBagConstraints.BOTH;
 
-		p.add(new JImage(this.getClass().getResource("logo.png")), c);
+		p.add(new JImage(this.getClass().getResource("/logo.png")), c);
 		JPanel blank = new JPanel();
 		blank.setBackground(Color.WHITE);
 		blank.setOpaque(true);

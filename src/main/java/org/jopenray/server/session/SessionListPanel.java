@@ -61,7 +61,7 @@ public class SessionListPanel extends JPanel {
 							boolean hasFocus, int row, int column) {
 						if (((Boolean) value)) {
 							this.setIcon(new ImageIcon(OpenRayServer.class
-									.getResource("thinclient.png")));
+									.getResource("/thinclient.png")));
 						} else {
 							this.setIcon(null);
 						}
@@ -82,10 +82,10 @@ public class SessionListPanel extends JPanel {
 							boolean hasFocus, int row, int column) {
 						if (((Integer) value) == 1) {
 							this.setIcon(new ImageIcon(OpenRayServer.class
-									.getResource("card.png")));
+									.getResource("/card.png")));
 						} else if (((Integer) value) == 2) {
 							this.setIcon(new ImageIcon(OpenRayServer.class
-									.getResource("card_red.png")));
+									.getResource("/card_red.png")));
 						} else {
 							this.setIcon(null);
 						}
