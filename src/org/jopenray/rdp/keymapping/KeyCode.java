@@ -421,4 +421,21 @@ public class KeyCode
         ",;`",
         "zZ", "xX", "cC", "vV", "bB", "nN", "mM", "��", "��", ".:"
         };
+
+        private static final String[] hid_key_US = {
+        "", "", "", "", "aA", "bB", "cC", "dD", "eE", "fF", "gG", "hH", "iI",
+        "jJ", "kK", "lL", "mM", "nN", "oO", "pP", "qQ", "rR", "sS", "tT", "uU",
+        "vV", "wW", "xX", "yY", "zZ", "1!", "2@", "3#", "4$", "5%", "6^", "7&",
+        "8*", "9(", "0)", "\n\n", "\e\e", "\b\b", "\t\t", "  ", "-_", "=+",
+        "[{", "]}", "\\|", ";:", "'\"", "`~", ",<", ".>", "/?",
+        "\0CAPS_LOCK", "\0F1", "\0F2", "\0F3", "\0F4", "\0F5", "\0F6",
+        "\0F7", "\0F8", "\0F9", "\0F10", "\0F11", "\0PRINTSCREEN",
+        "\0SCROLL_LOCK", "\0PAUSE", "\0INSERT", "\0HOME", "\0PAGE_UP",
+        "\0DELETE", "\0END", "\0PAGE_DOWN", "\0RIGHT", "\0LEFT", "\0DOWN",
+        "\0UP", "\0NUM_LOCK", "\0NUMPAD1", "\0NUMPAD2", "\0NUMPAD3",
+        "\0NUMPAD4", "\0NUMPAD5", "\0NUMPAD6", "\0NUMPAD7",
+        "\0NUMPAD8", "\0NUMPAD9", "\0NUMPAD0",
+        "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "",
+        "", "\0HELP", "\0PROPS", "\0STOP", "\0AGAIN", "\0CANCEL", "\0CUT",
+        "\0COPY", "\0PASTE", "\0FIND"
 }
