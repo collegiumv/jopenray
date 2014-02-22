@@ -1,3 +1,8 @@
 Configurations/
 build/
 dist/
+.gradle/
+.settings/
+bin/
+.classpath
+.project
