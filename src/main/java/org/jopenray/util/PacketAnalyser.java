@@ -20,14 +20,10 @@ package org.jopenray.util;
 import java.awt.Color;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintStream;
 
-import sun.misc.HexDumpEncoder;
-
-import com.sun.org.apache.xalan.internal.xsltc.dom.BitArray;
+import org.apache.commons.io.HexDump;
 
 public class PacketAnalyser {
 	static BufferedOutputStream soundOut;
@@ -146,8 +142,7 @@ public class PacketAnalyser {
 						if (nbBytes > 1024) {
 							out.println("! data too long:" + nbBytes);
 						} else {
-							HexDumpEncoder hdump = new HexDumpEncoder();
-							out.println(hdump.encode(unkuonw));
+							HexDump.dump(unkuonw,0,System.err,0);
 						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -546,28 +541,8 @@ public class PacketAnalyser {
 			dump = true;
 		}
 		if (dump) {
-			HexDumpEncoder hdump = new HexDumpEncoder();
-			out.println(hdump.encode(udpData));
+			HexDump.dump(udpData, 0, System.err, 0);
 		}
-	}
-
-	private static void printBits(PrintStream out, int w, int h, byte[] b1) {
-		int count = 0;
-		for (int y = 0; y < h; y++) {
-			for (int x = 0; x < w / 8; x++) {
-				BitArray set = new BitArray(8, new int[] { (int) b1[count] });
-				count++;
-				for (int t = 24; t < 32; t++) {
-					if (set.getBit(t))
-						out.print(1);
-					else {
-						out.print(0);
-					}
-				}
-			}
-			out.println();
-		}
-		byte[] n = new byte[] { 0x45 };
 	}
 
 	public static Color readColor(ByteArrayInputStream in) {

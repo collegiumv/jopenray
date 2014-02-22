@@ -17,7 +17,7 @@
 
 package org.jopenray.util;
 
-import sun.misc.HexDumpEncoder;
+
 
 public class PcapPacket {
 
@@ -29,8 +29,6 @@ public class PcapPacket {
 
 	public PcapPacket(byte[] data) {
 		this.raw = data;
-		HexDumpEncoder d = new HexDumpEncoder();
-
 	}
 
 	public boolean isIP() {

@@ -25,7 +25,8 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.SocketException;
 
-import sun.misc.HexDumpEncoder;
+import org.apache.commons.io.HexDump;
+
 
 public class RendererListener {
 
@@ -176,8 +177,6 @@ public class RendererListener {
 					byte[] unkuonw = new byte[nbBytes];
 					try {
 						int lRead = bIn.read(unkuonw);
-						HexDumpEncoder hdump = new HexDumpEncoder();
-						// out.println(hdump.encode(unkuonw));
 						out.println("FillRectBitmap: Color:" + a3p1 + ","
 								+ a3p2 + "," + a3p3 + "," + a3p4
 								+ " | bytes/row:" + nbBytesPerRow + "l:"
@@ -216,8 +215,7 @@ public class RendererListener {
 						if (nbBytes > 1024) {
 							out.println("! data too long:" + nbBytes);
 						} else {
-							HexDumpEncoder hdump = new HexDumpEncoder();
-							out.println(hdump.encode(unkuonw));
+							HexDump.dump(unkuonw, 0, System.err, 0);
 						}
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -314,8 +312,6 @@ public class RendererListener {
 					dump = true;
 					try {
 						int lRead = bIn.read(unkuonwn);
-						HexDumpEncoder hdump = new HexDumpEncoder();
-						// out.println(hdump.encode(unkuonwn));
 					} catch (IOException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -483,8 +479,7 @@ public class RendererListener {
 				dump = true;
 		}
 		if (dump) {
-			HexDumpEncoder hdump = new HexDumpEncoder();
-			out.println(hdump.encode(udpData));
+			HexDump.dump(udpData,0, System.err, 0);
 		}
 	}
 
