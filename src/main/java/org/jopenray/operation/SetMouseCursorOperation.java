@@ -19,7 +19,7 @@ package org.jopenray.operation;
 
 import java.awt.Color;
 
-import sun.misc.HexDumpEncoder;
+import org.apache.commons.io.HexDump;
 
 public class SetMouseCursorOperation extends Operation {
 	public static int INVISIBLE_CURSOR = 0;
@@ -63,9 +63,13 @@ public class SetMouseCursorOperation extends Operation {
 					+ width + "x" + height + ")");
 		}
 		if (mask.length != expectedLength) {
-			HexDumpEncoder encoder = new HexDumpEncoder();
-			System.err.println(encoder.encode(bitmap));
-			System.err.println(encoder.encode(mask));
+			try {
+			HexDump.dump(bitmap, 0, System.err,0);
+			HexDump.dump(mask, 0, System.err,0);
+			}catch(Exception ignr) {
+
+			}
+
 			throw new IllegalArgumentException("Bad mask length:" + mask.length
 					+ " must be " + expectedLength + "(" + width + "x" + height
 					+ ")");

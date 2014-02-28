@@ -20,10 +20,9 @@ package org.jopenray.test;
 import static org.junit.Assert.assertArrayEquals;
 import static org.junit.Assert.assertTrue;
 
+import org.apache.commons.io.HexDump;
 import org.jopenray.util.ByteArrayListWithHeader;
 import org.junit.Test;
-
-import sun.misc.HexDumpEncoder;
 
 public class ByteArrayListWithHeaderTest {
 
@@ -134,8 +133,9 @@ public class ByteArrayListWithHeaderTest {
 		for (int i = 0; i < 10; i++) {
 			l2.setInt16(2 * i, i);
 		}
-		HexDumpEncoder d = new HexDumpEncoder();
-		System.out.println(d.encode(l2.getInnerByteBuffer()));
+		try {
+		HexDump.dump(l2.getInnerByteBuffer(), 0, System.err, 0);
+		}catch(Exception ignr) { }
 
 		assertArrayEquals(new byte[] { 0, 0, 0, 1, 0, 2, 0, 3, 0, 4, 0, 5, 0,
 				6, 0, 7, 0, 8, 0, 9, 0, 0, 10, 20, 10, 0, 0, 20, 10, 20, 0, 0,

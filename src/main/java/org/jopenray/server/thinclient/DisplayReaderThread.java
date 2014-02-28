@@ -24,10 +24,9 @@ import java.net.DatagramPacket;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.io.HexDump;
 import org.jopenray.operation.PadOperation;
 import org.jopenray.util.HID;
-
-import sun.misc.HexDumpEncoder;
 
 public class DisplayReaderThread extends Thread {
 
@@ -247,10 +246,9 @@ public class DisplayReaderThread extends Thread {
 				}
 			}
 		if (dump) {
-			HexDumpEncoder hdump = new HexDumpEncoder();
-			byte[] rBytes = new byte[l];
-			System.arraycopy(udpData, 0, rBytes, 0, l);
-			System.out.println(hdump.encode(rBytes));
+			try {
+				HexDump.dump(udpData, 0, System.err, 0);
+			} catch (Exception ignr) {}
 		}
 
 	}

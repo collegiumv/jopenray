@@ -22,7 +22,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 
-import sun.misc.HexDumpEncoder;
+import org.apache.commons.io.HexDump;
 
 public class PcapFileReader {
 
@@ -123,8 +123,7 @@ public class PcapFileReader {
 						+ " -> " + p.getDestIp() + ":" + p.getUDPDstPort());
 				System.out.println("isUDP:" + p.isUDP());
 				System.out.println("isTCP:" + p.isTCP());
-				HexDumpEncoder d = new HexDumpEncoder();
-				System.out.println(d.encode(p.getData()));
+				HexDump.dump(p.getData(), 0, System.out, 0);
 
 			}
 			c++;

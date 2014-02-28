@@ -23,6 +23,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.PixelGrabber;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import org.jopenray.operation.BitmapOperation;
 import org.jopenray.operation.BitmapRGBOperation;
@@ -30,8 +31,6 @@ import org.jopenray.operation.FillOperation;
 import org.jopenray.util.BitArray;
 import org.jopenray.util.TIntArrayList;
 import org.jopenray.util.Util;
-
-import com.sun.org.apache.xml.internal.utils.IntVector;
 
 public class BitmapEncoder {
 	private static final int NO_COLOR = 888;
@@ -335,7 +334,7 @@ public class BitmapEncoder {
 		int count = 0;// nombre de pixel contigues
 
 		int currentColor = pixels[offset];
-		IntVector counts = new IntVector();
+		Vector<Integer> counts = new Vector<Integer>();
 		// System.out.println("Analysing line");
 		for (int i = 0; i < width; i++) {
 			int p1 = pixels[offset];
@@ -479,7 +478,7 @@ public class BitmapEncoder {
 			}
 		}
 
-		IntVector counts = new IntVector();
+		Vector<Integer> counts = new Vector<Integer>();
 		int currentCount = 0;
 
 		int offset = y * bitmapWidth;
@@ -659,7 +658,7 @@ public class BitmapEncoder {
 
 	}
 
-	private void dumpCounts(int y, IntVector counts, int c1, int c2,
+	private void dumpCounts(int y, Vector<Integer> counts, int c1, int c2,
 			int startX, int x, int size) {
 
 		for (int i = 0; i < size; i++) {
