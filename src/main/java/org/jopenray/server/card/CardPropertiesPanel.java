@@ -50,7 +50,7 @@ public class CardPropertiesPanel extends JPanel {
 		//
 		c.gridx = 0;
 		c.weightx = 0;
-		// TODO: ouvrir une list des utilisateurs.
+		// TODO: open a list of users
 		this.add(new JLabel("Identifier"), c);
 		// Line 1
 		c.gridx = 0;

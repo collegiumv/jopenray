@@ -88,7 +88,7 @@ public class DisplayMessage {
 				int nbBytesMissing = o.getLength() - nbCopiedBytes;
 				bufferLength += nbCopiedBytes;
 				if (nbBytesMissing > 0) {
-					// Envoi le packet splitté
+					// Sending the packet split
 					type = 6;
 
 					// add header

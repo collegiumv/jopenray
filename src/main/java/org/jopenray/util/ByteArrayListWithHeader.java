@@ -22,8 +22,7 @@ public class ByteArrayListWithHeader {
 	private int length;
 	private int initialCapacity;
 
-	private int headerSize; // n bytes insérés au debut et a chaque augmentation
-							// de taille
+	private int headerSize; // n bytes inserted at the beginning and each increase in size
 
 	public ByteArrayListWithHeader(int initialCapacity, int headerSize) {
 		this.initialCapacity = initialCapacity;
@@ -62,7 +61,7 @@ public class ByteArrayListWithHeader {
 
 	public void addBytes(byte[] a) {
 		// check(byteArray.length);
-		// On ne peut pas faire de array copy..
+		// You can not make array copy ..
 		// System.arraycopy(byteArray, 0, bytes, length, byteArray.length);
 		// length += byteArray.length;
 

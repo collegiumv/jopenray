@@ -100,7 +100,7 @@ public class BitmapEncoder {
 			BitmapLine line = l.get(i);
 
 			if (!currentLine.canBeMergedWith(line)) {
-				// Encode les merged
+				// Encode the merged
 				
 				encodeLines(first, i - first, message);
 				// 
@@ -174,8 +174,8 @@ public class BitmapEncoder {
 	private void encodeLines(int first, int height, DisplayMessage m) {
 
 		BitmapLine firstLine = l.get(first);
-		// System.out.println("Encode à partir de la ligne " + first
-		// + " hauteur: " + height + "  [premiere ligne:" + firstLine
+		// System.out.println("Encode from the line " + first
+		// + " height: " + height + "  [first line:" + firstLine
 		// + "]");
 
 		int width = firstLine.getWidth();
@@ -211,7 +211,7 @@ public class BitmapEncoder {
 		} else if (limitedWidth < 1) {
 			limitedWidth = 1;
 		}
-		// System.out.println("widht:" + width + " nbSegm:" + nbSegmentW
+		// System.out.println("width:" + width + " nbSegm:" + nbSegmentW
 		// + " limit width to:" + limitedWidth + " MAX:" + MAX);
 
 		int[] widths = Util.split(width, limitedWidth);
@@ -247,7 +247,7 @@ public class BitmapEncoder {
 
 	private void sendFullColorOptimized(int first, DisplayMessage m,
 			int height, int width) {
-		// On envoi en full
+		// Is sending full
 		// System.out.println("RGB: " + toX + " , " + (toY + first) + " "
 		// + width + " x " + height);
 
@@ -259,7 +259,7 @@ public class BitmapEncoder {
 
 	private void sendFullColorLineAsRGB(int first, DisplayMessage m,
 			int height, int width) {
-		// On envoi en full
+		// Is sending full
 		// System.out.println("RGB: " + toX + " , " + (toY + first) + " "
 		// + width + " x " + height);
 
@@ -294,7 +294,7 @@ public class BitmapEncoder {
 		} else if (limitedWidth < 1) {
 			limitedWidth = 1;
 		}
-		// System.out.println("widht:" + width + " nbSegm:" + nbSegmentW
+		// System.out.println("width:" + width + " nbSegm:" + nbSegmentW
 		// + " limit width to:" + limitedWidth + " MAX:" + MAX);
 
 		int[] widths = Util.split(width, limitedWidth);
@@ -331,7 +331,7 @@ public class BitmapEncoder {
 	private void sendBiColorLine(int[] pixels, int width, int y, int toX,
 			int toY, int c0, int c1, DisplayMessage m) {
 		int offset = y * width;
-		int count = 0;// nombre de pixel contigues
+		int count = 0;// number of contiguous pixels
 
 		int currentColor = pixels[offset];
 		Vector<Integer> counts = new Vector<Integer>();
@@ -366,7 +366,7 @@ public class BitmapEncoder {
 			int nb = counts.elementAt(i);
 
 			if (nb > 16) {
-				// Envoi le mono
+				// Sending mono
 				int nbMono = offsetX - lastSentX;
 				if (nbMono > 0) {
 					// System.out.println("Bi "+(toX + lastSentX)+","+(toY +
@@ -378,7 +378,7 @@ public class BitmapEncoder {
 									c0), new Color(c1), b);
 					m.addOperation(bOp);
 				}
-				// Envoi le fill
+				// Sending fill
 				// System.out.println("Fill rect:"+(toX + offsetX)+","+(toY +
 				// y)+" "+nb+"x1");
 				FillOperation fOp = new FillOperation(toX + offsetX, toY + y,
@@ -448,7 +448,7 @@ public class BitmapEncoder {
 			}
 
 			if (!isNewColor) {
-				// jamais eu
+				// never
 				nbColor++;
 				ref[hash] = 1;
 				colors.add(c);
@@ -515,7 +515,7 @@ public class BitmapEncoder {
 			if (c1 == NO_COLOR) {
 				c1 = c;
 			} else if (c != c1 && c2 == NO_COLOR) {
-				// on decouvre une 2eme couleur
+				// 2nd color we discover
 				c2 = c;
 			}
 			if (c == c1) {
@@ -539,23 +539,23 @@ public class BitmapEncoder {
 
 			}
 			if (c != c1 && c != c2 || x == bitmapWidth - 1) {
-				// On decouvre une 3eme couleur ou on est en fin de ligne
+				// We discover a 3rd color or are in end of line
 				counts.addElement(currentCount);
 				int size = counts.size();
 				if (DEBUG) {
-					System.err.println("==============  Changement de couleur");
+					System.err.println("==============  Color change");
 					dumpCounts(y, counts, c1, c2, startX, x, size);
 				}
-				// Creation des operations
-				int cumulatedCount = 0; // longeur du segment cummulé
-				int s = 0; // debut du segment cummulé courant
-				int nbCumulated = 0;// nombre de segment cumulés
+				// Creation of operations
+				int cumulatedCount = 0; // Cumulative length of the segment
+				int s = 0; // Cumulative beginning of the current segment
+				int nbCumulated = 0;// Cumulative number of segment
 				int lastSentSegment = -2;
 				for (int i = 0; i < size; i++) {
 					int v = counts.elementAt(i);
 
 					if (cumulatedCount + v > MAX_SIZE) {
-						// envoi jusqu'a i-1
+						// sending up to i-1
 						if (cumulatedCount > 0) {
 							//System.err.println("cumulated:" + nbCumulated);
 							if (nbCumulated == 1) {
@@ -593,10 +593,10 @@ public class BitmapEncoder {
 
 				}
 				if (lastSentSegment <= size) {
-					// la fin
+					// the end
 
 					if (nbCumulated == 1) {
-					//	System.err.println("fin mono de " + s + " l:"
+					//	System.err.println("end mono " + s + " l:"
 					//			+ (cumulatedCount) + " color: isC1:"
 					//			+ (lastSentSegment % 2 == 0));
 
@@ -613,7 +613,7 @@ public class BitmapEncoder {
 						}
 
 					} else {
-					//	System.err.println("fin bi de " + s + " l:"
+					//	System.err.println("end bi " + s + " l:"
 					//			+ (cumulatedCount));
 						m.addOperation(getBiColorBitmapOperation(pixels, startX
 								+ s, cumulatedCount, bitmapWidth, y, c1, c2,
@@ -688,7 +688,7 @@ public class BitmapEncoder {
 		} else if (limitedWidth < 1) {
 			limitedWidth = 1;
 		}
-		// System.out.println("widht:" + width + " nbSegm:" + nbSegmentW
+		// System.out.println("width:" + width + " nbSegm:" + nbSegmentW
 		// + " limit width to:" + limitedWidth + " MAX:" + MAX);
 
 		int[] widths = Util.split(bitmapWidth, limitedWidth);
@@ -704,7 +704,7 @@ public class BitmapEncoder {
 	private BitmapOperation getBiColorBitmapOperation(int[] pixels, int startX,
 			int pixelToSend, int bitmapWidth, int y, int c1, int c2, int toX,
 			int toY) {
-		// On envoi un setRectBitmap
+		// We sent a setRectBitmap
 		// System.out.println("c:" + c + " c1:" + c1 + "c2:" +
 		// c2);
 		// System.out.println("x:" + x + " start:" + startX);
