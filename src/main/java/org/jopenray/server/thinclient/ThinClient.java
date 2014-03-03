@@ -221,11 +221,9 @@ public class ThinClient {
 	}
 
 	private void startRFB(final Session session) {
-		if (true) {
-			JOptionPane.showMessageDialog(null,
-					"RFB sessions are disabled in this release.");
-			return;
-		}
+		JOptionPane.showMessageDialog(null,
+				"RFB sessions are disabled in this release.");
+		return;
 
 		if (thread != null && !thread.isInterrupted()) {
 
