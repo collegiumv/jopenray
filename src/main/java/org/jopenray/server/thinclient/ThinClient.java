@@ -224,31 +224,6 @@ public class ThinClient {
 		JOptionPane.showMessageDialog(null,
 				"RFB sessions are disabled in this release.");
 		return;
-
-		if (thread != null && !thread.isInterrupted()) {
-
-			thread.interrupt();
-		}
-
-		thread = new Thread() {
-			RFBAdapter t = new RFBAdapter();
-
-			public void run() {
-				t = new RFBAdapter();
-				tReader.addInputListener(t);
-				t.start(ThinClient.this, session);
-
-			}
-
-			@Override
-			public void interrupt() {
-				tReader.removeInputListener(t);
-				t.stop();
-				super.interrupt();
-			}
-		};
-
-		thread.start();
 	}
 
 	public void stop() {
